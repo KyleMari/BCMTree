@@ -33,9 +33,11 @@ public class SettingsActivity extends ActionBarActivity {
     Spinner contactGroupSpinner;
     View linearLayout[];
     EditText emailBcmNumField;
+    EditText drillMsgField;
     TextView emailBcmNumLabel;
     NumberPicker timeLimitPicker;
     Configuration config;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +49,14 @@ public class SettingsActivity extends ActionBarActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        if(extras != null){
-            config.setAttribFromBundle(extras);
-        }
 
+
+        //initializes the view variables
         roleSpinner = (Spinner) findViewById(R.id.role_spinner);
         contactGroupSpinner = (Spinner) findViewById(R.id.contact_group_spinner);
         emailBcmNumField = (EditText) findViewById(R.id.email_bcm_num_field);
         emailBcmNumLabel = (TextView) findViewById(R.id.email_bcm_num_label);
+        drillMsgField = (EditText) findViewById(R.id.drill_message_field);
         linearLayout = new View[2];
         linearLayout[0] = findViewById(R.id.label_ll);
         linearLayout[1] = findViewById(R.id.view_ll);
@@ -69,7 +71,7 @@ public class SettingsActivity extends ActionBarActivity {
         timeLimitPicker.setMaxValue(60);
         timeLimitPicker.setWrapSelectorWheel(false);
         timeLimitPicker.setDisplayedValues(nums);
-        timeLimitPicker.setValue(1);
+        timeLimitPicker.setValue(15);
 
 
         final float bcmFieldDp = this.getResources().getDimension(R.dimen.bcm_number_field_width);
@@ -82,7 +84,8 @@ public class SettingsActivity extends ActionBarActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 //clears the field
-                emailBcmNumField.setText("");
+                if((!roleSpinner.getSelectedItem().toString().equals(config.getRole())))
+                    emailBcmNumField.setText("");
 
                 if(roleSpinner.getSelectedItem().toString().equals("Team Lead")){
 
@@ -125,25 +128,69 @@ public class SettingsActivity extends ActionBarActivity {
         });
         roleSpinner.setSelection(1);
 
+
+        //puts the values to their respective views
+        try {
+            if (extras != null) {
+                //sets the attributes from passed bundle
+                config.setAttribFromBundle(extras);
+
+                //states the currently selected user mode and its respective fields
+                if(config.getRole().equals("BCM")) {
+                    roleSpinner.setSelection(0);
+                    emailBcmNumField.setText(config.getEmail());
+                    timeLimitPicker.setValue(config.getTimeLimitLength());
+                }
+                else {
+                    roleSpinner.setSelection(1);
+                    emailBcmNumField.setText(config.getBcmNumber());
+                }
+
+                //states the drill message
+                drillMsgField.setText(config.getDrillMsg());
+
+
+
+            }
+        }catch(NullPointerException ne){
+            ne.printStackTrace();
+        }
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //gets the value of the attributes
-                //config.setContactGroup(contactGroupSpinner.getSelectedItem().toString().trim());
-                config.setRole(roleSpinner.getSelectedItem().toString().trim());
-                Toast.makeText(this, config.getRole(), Toast.LENGTH_LONG).show();
-
-                Intent i = new Intent(SettingsActivity.this, MainActivity.class);
-                i.putExtras(config.getAttribBundle());
-                startActivity(i);
-
+                returnToMainScreen();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        returnToMainScreen();
+    }
+
+    private void returnToMainScreen(){
+        //gets the value of the attributes
+        //config.setContactGroup(contactGroupSpinner.getSelectedItem().toString().trim());
+        config.setRole(roleSpinner.getSelectedItem().toString().trim());
+
+        if(config.getRole().equals("BCM")){
+            config.setEmail(emailBcmNumField.getText().toString().trim());
+            config.setTimeLimitLength(timeLimitPicker.getValue());
+        }else
+            config.setBcmNumber(emailBcmNumField.getText().toString().trim());
+
+        config.setDrillMsg(drillMsgField.getText().toString().trim());
+
+        //passes values to intent and starts the next class
+        Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+        i.putExtras(config.getAttribBundle());
+        startActivity(i);
+        finish();
+    }
 }
