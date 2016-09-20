@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">BCMTree</string>
+
+    <string name="trigger_non_drill_btn_label">Trigger Non-Drill</string>
+    <string name="trigger_drill_btn_label">Trigger Drill</string>
+    <string name="settings_btn_label">Settings</string>
+
+    <string name="home_title_bar_team_lead_mode">Home (Team Lead)</string>
+    <string name="home_title_bar_bcm_manager_mode">Home (BCM Manager)</string>
+
+
+</resources>
