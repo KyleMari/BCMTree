@@ -8,24 +8,35 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
 
-    private String userMode = "Team Lead"; // refers to the user mode of this system
+    private boolean isFirstRun = true;
+    private Configuration config;
+    private String userMode = ""; // refers to the user mode of this system
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //checks if the user mode has already been switched from team lead to bcm manager
+        config = new Configuration();
+
+        //checks if the user mode has already been switched from team lead to bcm
         Intent i = getIntent();
-        if(i.hasExtra("User Mode")){
-            String modeLabel = i.getStringExtra("User Mode");
-            if(modeLabel.equals("BCM Manager")) {
-                userMode = modeLabel;
-                setTitle(R.string.home_title_bar_bcm_manager_mode);
-            }else{
+        Bundle extras = i.getExtras();
+
+        try {
+            if (extras != null) {
+                isFirstRun = false;
+                config.setAttribFromBundle(extras);
+                if (config.getRole().equals("BCM")) {
+                    setTitle(R.string.home_title_bar_bcm_manager_mode);
+                } else {
+                    setTitle(R.string.home_title_bar_team_lead_mode);
+                }
+            } else {
                 setTitle(R.string.home_title_bar_team_lead_mode);
             }
-        }else {
+        }catch(NullPointerException ne){
+            ne.printStackTrace();
             setTitle(R.string.home_title_bar_team_lead_mode);
         }
 
@@ -34,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void settingsOnClick(View v){
         Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+        if(!isFirstRun) {
+            i.putExtras(config.getAttribBundle());
+        }
         startActivity(i);
     }
 

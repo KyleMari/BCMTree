@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context="com.example.carrefour.bcm_notification_system.SettingsActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,7 +20,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/label_ll"
+            android:layout_height="300dp"
             android:layout_weight=".40"
 
             android:orientation="vertical"
@@ -26,6 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:gravity="center"
                 android:layout_gravity="right"
                 android:textSize="20dp"
                 android:text="@string/role_label"/>
@@ -33,33 +37,76 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_gravity="right"
+                android:gravity="center"
                 android:layout_height="40dp"
                 android:textSize="20dp"
                 android:text="@string/contact_group_label"/>
 
+            <TextView
+                android:id="@+id/email_bcm_num_label"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_height="40dp"
+                android:textSize="20dp"
+                android:text="@string/bcm_number_label"/>
+
+            <TextView
+                android:id="@+id/drill_message_label"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_height="40dp"
+                android:textSize="20dp"
+                android:text="@string/drill_message_label"/>
 
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/view_ll"
+            android:layout_height="300dp"
             android:layout_weight=".60"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
 
             <Spinner
-                android:layout_width="150dp"
+                android:id="@+id/role_spinner"
+                android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:drawSelectorOnTop="true"
                 android:entries="@array/role_array">
             </Spinner>
 
             <Spinner
-                android:layout_width="150dp"
+                android:id="@+id/contact_group_spinner"
+                android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:drawSelectorOnTop="true">
             </Spinner>
+
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:id="@+id/email_bcm_num_field"
+                android:inputType="number"/>
+
+            <ScrollView
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:id="@+id/scrollView" >
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/editText" />
+            </ScrollView>
 
         </LinearLayout>
 
@@ -71,6 +118,53 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:id="@+id/label_ll2"
+            android:layout_height="125dp"
+            android:layout_weight=".40"
+
+            android:orientation="vertical"
+            >
+
+        <TextView
+            android:id="@+id/time_limit_label"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:text="@string/time_limit_label"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:id="@+id/view_ll2"
+            android:layout_height="125dp"
+            android:layout_weight=".60"
+
+            android:orientation="horizontal"
+            >
+
+
+            <NumberPicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/time_limit_picker" />
+
+            <TextView
+                android:id="@+id/length_time_label"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:text="Minutes"/>
+
+        </LinearLayout>
+
 
 
     </LinearLayout>
