@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:text="@string/trigger_non_drill_btn_label"
         android:id="@+id/button"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="33dp"
+        android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -38,5 +39,6 @@
         android:layout_alignRight="@+id/button2"
         android:layout_alignEnd="@+id/button2"
         android:layout_alignLeft="@+id/button2"
-        android:layout_alignStart="@+id/button2" />
+        android:layout_alignStart="@+id/button2"
+        android:onClick="settingsOnClick" />
 </RelativeLayout>
