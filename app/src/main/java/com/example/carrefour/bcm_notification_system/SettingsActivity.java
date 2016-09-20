@@ -3,6 +3,7 @@ package com.example.carrefour.bcm_notification_system;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -38,16 +39,24 @@ public class SettingsActivity extends ActionBarActivity {
     NumberPicker timeLimitPicker;
     Configuration config;
 
+    public static final String MY_PREFERENCES = "MyPrefs";
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    private String userMode = "";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         setTitle(R.string.settings_btn_label);
 
+
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         //checks for extras from previous intent
-        config = new Configuration();
+        /*config = new Configuration();
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras = intent.getExtras();*/
 
 
 
@@ -83,8 +92,9 @@ public class SettingsActivity extends ActionBarActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                editor.putString("userMode", roleSpinner.getSelectedItem().toString().trim());
                 //clears the field
-                if((!roleSpinner.getSelectedItem().toString().equals(config.getRole())))
+                if((!roleSpinner.getSelectedItem().toString().equals(sharedPreferences.getString("userMode", "Team Lead"))))
                     emailBcmNumField.setText("");
 
                 if(roleSpinner.getSelectedItem().toString().equals("Team Lead")){
@@ -126,32 +136,24 @@ public class SettingsActivity extends ActionBarActivity {
 
             }
         });
-        roleSpinner.setSelection(1);
 
 
         //puts the values to their respective views
         try {
-            if (extras != null) {
-                //sets the attributes from passed bundle
-                config.setAttribFromBundle(extras);
+            //states the currently selected user mode and its respective fields
 
-                //states the currently selected user mode and its respective fields
-                if(config.getRole().equals("BCM")) {
-                    roleSpinner.setSelection(0);
-                    emailBcmNumField.setText(config.getEmail());
-                    timeLimitPicker.setValue(config.getTimeLimitLength());
-                }
-                else {
-                    roleSpinner.setSelection(1);
-                    emailBcmNumField.setText(config.getBcmNumber());
-                }
-
-                //states the drill message
-                drillMsgField.setText(config.getDrillMsg());
-
-
-
+            if(sharedPreferences.getString("userMode", "Team Lead").equals("BCM")) {
+                roleSpinner.setSelection(0);
+                emailBcmNumField.setText(sharedPreferences.getString("email", ""));
+                timeLimitPicker.setValue(sharedPreferences.getInt("timeLimit", 15));
             }
+            if(sharedPreferences.getString("userMode", "Team Lead").equals("Team Lead")) {
+                roleSpinner.setSelection(1);
+                emailBcmNumField.setText(sharedPreferences.getString("bcmNum", ""));
+            }
+
+            //states the drill message
+            drillMsgField.setText(sharedPreferences.getString("drillMsg", ""));
         }catch(NullPointerException ne){
             ne.printStackTrace();
         }
@@ -177,20 +179,30 @@ public class SettingsActivity extends ActionBarActivity {
     private void returnToMainScreen(){
         //gets the value of the attributes
         //config.setContactGroup(contactGroupSpinner.getSelectedItem().toString().trim());
-        config.setRole(roleSpinner.getSelectedItem().toString().trim());
-
-        if(config.getRole().equals("BCM")){
-            config.setEmail(emailBcmNumField.getText().toString().trim());
-            config.setTimeLimitLength(timeLimitPicker.getValue());
-        }else
-            config.setBcmNumber(emailBcmNumField.getText().toString().trim());
-
-        config.setDrillMsg(drillMsgField.getText().toString().trim());
+        //config.setRole(roleSpinner.getSelectedItem().toString().trim());
 
         //passes values to intent and starts the next class
         Intent i = new Intent(SettingsActivity.this, MainActivity.class);
-        i.putExtras(config.getAttribBundle());
+        //i.putExtras(config.getAttribBundle());
         startActivity(i);
+
+        editor.putString("userMode", roleSpinner.getSelectedItem().toString().trim());
+
+        if(roleSpinner.getSelectedItem().toString().trim().equals("BCM")){
+            //config.setEmail(emailBcmNumField.getText().toString().trim());
+            //config.setTimeLimitLength(timeLimitPicker.getValue());
+            editor.putString("email", emailBcmNumField.getText().toString().trim());
+            editor.putInt("timeLimit", timeLimitPicker.getValue());
+        }
+        if(roleSpinner.getSelectedItem().toString().trim().equals("Team Lead")) {
+            //config.setBcmNumber(emailBcmNumField.getText().toString().trim());
+            editor.putString("bcmNum", emailBcmNumField.getText().toString().trim());
+        }
+
+        //config.setDrillMsg(drillMsgField.getText().toString().trim());
+        editor.putString("drillMsg", drillMsgField.getText().toString().trim());
+        editor.commit();
+
         finish();
     }
 }

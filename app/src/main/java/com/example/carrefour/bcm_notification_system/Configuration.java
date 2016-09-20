@@ -12,6 +12,8 @@ public class Configuration {
     private String bcmNumber;
     private String email;
 
+    // gawa ka constructor filestream
+
     public String getEmail() {
         return email;
     }

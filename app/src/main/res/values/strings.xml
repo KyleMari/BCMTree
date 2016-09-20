@@ -6,7 +6,7 @@
     <string name="settings_btn_label">Settings</string>
 
     <string name="home_title_bar_team_lead_mode">Home (Team Lead)</string>
-    <string name="home_title_bar_bcm_manager_mode">Home (BCM)</string>
+    <string name="home_title_bar_bcm_mode">Home (BCM)</string>
 
     <string name="role_label">Role: </string>
     <string name="contact_group_label">Contact Group: </string>

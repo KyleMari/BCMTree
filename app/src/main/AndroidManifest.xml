@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.carrefour.bcm_notification_system.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,6 +20,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.carrefour.bcm_notification_system.MainActivity" />
         </activity>
+        <activity android:name=".TriggerActivity"></activity>
     </application>
 
 </manifest>
