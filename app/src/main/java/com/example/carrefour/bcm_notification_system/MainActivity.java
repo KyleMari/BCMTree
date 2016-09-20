@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //checks if the user mode has already been switched from team lead to bcm manager
+        
         Intent i = getIntent();
         if(i.hasExtra("User Mode")){
             String modeLabel = i.getStringExtra("User Mode");
