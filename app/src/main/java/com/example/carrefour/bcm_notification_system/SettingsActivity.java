@@ -2,10 +2,13 @@ package com.example.carrefour.bcm_notification_system;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -24,6 +28,10 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by kyle.mari.torralba on 9/20/2016.
@@ -152,6 +160,15 @@ public class SettingsActivity extends ActionBarActivity {
                 emailBcmNumField.setText(sharedPreferences.getString("bcmNum", ""));
             }
 
+            ArrayList<ContactItem> contactGroupsList = fetchGroups();
+            String[] groupNames = new String[contactGroupsList.size()];
+            for(int i = 0; i < contactGroupsList.size(); i++){
+                groupNames[i] = contactGroupsList.get(i).name;
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, groupNames);
+            contactGroupSpinner.setAdapter(adapter);
             //states the drill message
             drillMsgField.setText(sharedPreferences.getString("drillMsg", ""));
         }catch(NullPointerException ne){
@@ -205,4 +222,63 @@ public class SettingsActivity extends ActionBarActivity {
 
         finish();
     }
+
+    private ArrayList<ContactItem> fetchGroups(){
+        ArrayList<ContactItem> groupList = new ArrayList<ContactItem>();
+        String[] projection = new String[]{ContactsContract.Groups._ID, ContactsContract.Groups.TITLE};
+        Cursor cursor = getContentResolver().query(ContactsContract.Groups.CONTENT_URI, projection,
+                null, null, null);
+        ArrayList<String> groupTitle = new ArrayList<String>();
+        while(cursor.moveToNext()){
+            ContactItem item = new ContactItem();
+            item.id = cursor.getString(cursor.getColumnIndex(ContactsContract.Groups._ID));
+            String groupName = cursor.getString(cursor.getColumnIndex(ContactsContract.Groups.TITLE));
+
+            if(groupName.contains("Group: "))
+                groupName = groupName.substring(groupName.indexOf("Group:")+"Group:".length()).trim();
+            if(groupName.contains("Favorite_"))
+                groupName = "Favorite";
+
+            if(groupName.contains("Starred in Android") || groupName.contains("My Contacts"))
+                continue;
+
+            if(groupTitle.contains(groupName)){
+                for(ContactItem group : groupList){
+                    if(group.name.equals(groupName)){
+                        group.id += "," + item.id;
+                        break;
+                    }
+                }
+            }else{
+                groupTitle.add(groupName);
+                item.name = groupName;
+                groupList.add(item);
+            }
+
+        }
+        Toast.makeText(this, projection.toString(), Toast.LENGTH_LONG).show();
+        cursor.close();
+        Collections.sort(groupList, new Comparator<ContactItem>(){
+            public int compare(ContactItem item1, ContactItem item2){
+                return item2.name.compareTo(item1.name) < 0? 0:-1;
+            }
+        });
+        return groupList;
+    }
+
+    private ArrayList<String> retrieveContactNames(){
+        ArrayList<String> names = new ArrayList<String>();
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+        if(cur.getCount() > 0){
+            while(cur.moveToNext()){
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                names.add(name);
+            }
+        }
+        return names;
+    }
+
 }
