@@ -27,7 +27,8 @@
         android:text="Send Message"
         android:id="@+id/send_btn"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="sendMessageOnClick" />
 
     <LinearLayout
         android:orientation="vertical"

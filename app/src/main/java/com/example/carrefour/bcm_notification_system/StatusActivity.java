@@ -1,22 +1,20 @@
 package com.example.carrefour.bcm_notification_system;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
-import android.view.View;
 
-public class TriggerActivity extends ActionBarActivity {
 
-    private Configuration config;
+public class StatusActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trigger);
-        setTitle(R.string.trigger_title_bar);
+        setContentView(R.layout.status);
+        setTitle(R.string.status_title_bar);
+
     }
 
     @Override
@@ -37,14 +35,9 @@ public class TriggerActivity extends ActionBarActivity {
 
     private void returnToMainScreen(){
         //passes values to intent and starts the next class
-        Intent i = new Intent(TriggerActivity.this, MainActivity.class);
+        Intent i = new Intent(StatusActivity.this, MainActivity.class);
         startActivity(i);
         finish();
     }
 
-    public void sendMessageOnClick(View v){
-        Intent i = new Intent(TriggerActivity.this, StatusActivity.class);
-        startActivity(i);
-        finish();
-    }
 }

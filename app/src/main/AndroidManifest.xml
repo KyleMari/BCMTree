@@ -20,7 +20,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.carrefour.bcm_notification_system.MainActivity" />
         </activity>
-        <activity android:name=".TriggerActivity"></activity>
+        <activity android:name=".TriggerActivity" />
+        <activity android:name=".StatusActivity" />
+
     </application>
 
 </manifest>
