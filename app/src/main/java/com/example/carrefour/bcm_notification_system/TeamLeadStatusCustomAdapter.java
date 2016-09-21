@@ -41,10 +41,11 @@ public class TeamLeadStatusCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context
                     .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.group_list_custom, null);
+            convertView = mInflater.inflate(R.layout.group_list_custom, parent, false);
         }
 
         TextView name = (TextView) convertView.findViewById(R.id.team_lead_name);

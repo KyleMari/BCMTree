@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.*;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * Created by kyle.mari.torralba on 9/21/2016.
  */
-public class TeamLeadStatusListFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class TeamLeadStatusListFragment extends ListFragment implements OnItemClickListener {
 
     String[] teamLeadNames;
     private List<StatusItem> statusItems;
@@ -22,7 +24,6 @@ public class TeamLeadStatusListFragment extends ListFragment implements AdapterV
 
     public static final String MY_PREFERENCES = "MyPrefs";
     SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -39,7 +40,8 @@ public class TeamLeadStatusListFragment extends ListFragment implements AdapterV
         statusItems = new ArrayList<StatusItem>();
 
         for (int i = 0; i < teamLeadNames.length; i++) {
-            StatusItem item = new StatusItem(teamLeadNames[i], sharedPreferences.getBoolean("teamLeadStatus_" + (i+1), false));
+            StatusItem item = new StatusItem(teamLeadNames[i], false);
+
             statusItems.add(item);
         }
 
@@ -53,6 +55,6 @@ public class TeamLeadStatusListFragment extends ListFragment implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Toast.makeText(getActivity(), statusItems.size(), Toast.LENGTH_LONG).show();
     }
 }

@@ -33,19 +33,19 @@
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="300dp"
-            android:layout_height="fill_parent">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/foodItemActvity_linearLayout_fragments"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical" >
 
                 <fragment
                     android:id="@+id/status_list_fragment"
                     android:name="com.example.carrefour.bcm_notification_system.TeamLeadStatusListFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="300dp" />
 
             </LinearLayout>
 

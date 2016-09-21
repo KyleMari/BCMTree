@@ -23,9 +23,10 @@
     </string-array>
     <string name="title_activity_status">StatusActivity</string>
 
-    <string-array name="team_lead_names">
+    <array name="team_lead_names">
         <item>Aileen Allatica</item>
         <item>Vincent Tan</item>
-    </string-array>
+        <item>Juan Dela Cruz</item>
+    </array>
 
 </resources>
