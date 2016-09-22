@@ -2,7 +2,10 @@ package com.example.carrefour.bcm_notification_system;
 
 import android.app.ListFragment;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,12 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
     private List<StatusItem> statusItems;
     TeamLeadStatusCustomAdapter adapter;
 
+
+
+
     public static final String MY_PREFERENCES = "MyPrefs";
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -35,7 +42,18 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
 
         super.onActivityCreated(savedInstanceState);
 
-        teamLeadNames = getResources().getStringArray(R.array.team_lead_names);
+        //teamLeadNames = getResources().getStringArray(R.array.team_lead_names);
+        String chosenGroupId = "";
+        if(!sharedPreferences.getString("contactGroupID", "").equals("")){
+            chosenGroupId = sharedPreferences.getString("contactGroupID", "");
+        }
+        ArrayList<ContactItem> contactListInGroup = getContactListFromGroup(chosenGroupId);
+        teamLeadNames = new String[contactListInGroup.size()];
+        if(!chosenGroupId.equals("")) {
+            for (int i = 0; i < contactListInGroup.size(); i++) {
+                teamLeadNames[i] = contactListInGroup.get(i).phDisplayName;
+            }
+        }
 
         statusItems = new ArrayList<StatusItem>();
 
@@ -49,6 +67,8 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
 
+
+
     }
 
 
@@ -56,5 +76,33 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), statusItems.size(), Toast.LENGTH_LONG).show();
+    }
+
+
+    public ArrayList<ContactItem> getContactListFromGroup(String groupID){
+        ArrayList<ContactItem> contactList = new ArrayList<ContactItem>();
+        Uri groupURI = ContactsContract.Data.CONTENT_URI;
+        String[] projection = new String[]{
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID
+        };
+        Cursor c = getActivity().getContentResolver().query(
+            groupURI, projection,
+            ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + "=" + groupID, null, null);
+        while(c.moveToNext()){
+            String id = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID));
+            Cursor pCur = getActivity().getContentResolver().query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                    new String[] { id }, null);
+            while(pCur.moveToNext()){
+                ContactItem data = new ContactItem();
+                data.phDisplayName = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                data.phNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                contactList.add(data);
+            }
+            pCur.close();
+        }
+        return contactList;
     }
 }

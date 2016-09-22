@@ -1,7 +1,5 @@
 package com.example.carrefour.bcm_notification_system;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -43,7 +41,7 @@ public class TriggerActivity extends ActionBarActivity {
     }
 
     public void sendMessageOnClick(View v){
-        Intent i = new Intent(TriggerActivity.this, StatusActivity.class);
+        Intent i = new Intent(TriggerActivity.this, BCMStatusActivity.class);
         startActivity(i);
         finish();
     }

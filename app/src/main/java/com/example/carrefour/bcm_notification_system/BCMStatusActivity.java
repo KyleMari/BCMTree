@@ -1,13 +1,16 @@
 package com.example.carrefour.bcm_notification_system;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 
-public class StatusActivity extends ActionBarActivity {
+public class BCMStatusActivity extends ActionBarActivity {
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class StatusActivity extends ActionBarActivity {
 
     private void returnToMainScreen(){
         //passes values to intent and starts the next class
-        Intent i = new Intent(StatusActivity.this, MainActivity.class);
+        Intent i = new Intent(BCMStatusActivity.this, MainActivity.class);
         startActivity(i);
         finish();
     }
