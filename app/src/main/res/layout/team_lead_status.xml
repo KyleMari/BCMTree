@@ -7,25 +7,12 @@
         android:orientation="horizontal"
         android:layout_height="100dp"
         android:layout_width="match_parent"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Countdown: "
-            android:textSize="20dp"
-            />
-
-        <TextView
-            android:id="@+id/countdown_indicator"
-            android:layout_width="150dp"
-            android:background="#FF0000"
-            android:layout_height="wrap_content" />
 
 
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center"
@@ -74,8 +61,9 @@
         <Button
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Generate Report"
-            android:id="@+id/report_btn" />
+            android:text="Send Report"
+            android:onClick="sendReportOnClick"
+            android:id="@+id/send_report_btn" />
     </LinearLayout>
 
 

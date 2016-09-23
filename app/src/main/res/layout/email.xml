@@ -26,7 +26,6 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="match_parent"
         android:layout_below="@+id/message_label"
         android:layout_alignParentLeft="true"
@@ -40,23 +39,22 @@
             android:layout_gravity="center_horizontal" >
 
             <EditText
+                android:id="@+id/email_body"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/non_drill_msg_body" />
+                 />
         </ScrollView>
-
-
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Message"
-        android:id="@+id/send_message_btn"
+        android:text="Send Email"
+        android:id="@+id/send_email_btn"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="sendMessageOnClick" />
+        android:onClick="sendEmailOnClick" />
 
 </RelativeLayout>

@@ -6,20 +6,20 @@ package com.example.carrefour.bcm_notification_system;
  */
 public class StatusItem {
 
-    private String teamLeadName;
+    private String contactName;
     private boolean isChecked;
 
-    public StatusItem(String teamLeadName, boolean isChecked){
-        this.teamLeadName = teamLeadName;
+    public StatusItem(String contactName, boolean isChecked){
+        this.contactName = contactName;
         this.isChecked = isChecked;
     }
 
-    public String getTeamLeadName() {
-        return teamLeadName;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setTeamLeadName(String teamLeadName) {
-        this.teamLeadName = teamLeadName;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
     public boolean isChecked() {

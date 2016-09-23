@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * Created by kyle.mari.torralba on 9/21/2016.
  */
-public class TeamLeadStatusListFragment extends ListFragment implements OnItemClickListener {
+public class BCMStatusListFragment extends ListFragment implements OnItemClickListener {
 
-    String[] memberNames;
+    String[] teamLeadNames;
     private List<StatusItem> statusItems;
-    TeamLeadCustomAdapter adapter;
+    BCMStatusCustomAdapter adapter;
 
 
 
@@ -34,7 +34,7 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.member_list_fragment, null, false);
+        return inflater.inflate(R.layout.group_list_fragment, null, false);
     }
 
     @Override
@@ -49,22 +49,22 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
             chosenGroupId = sharedPreferences.getString("contactGroupID", "");
         }
         ArrayList<ContactItem> contactListInGroup = getContactListFromGroup(chosenGroupId);
-        memberNames = new String[contactListInGroup.size()];
+        teamLeadNames = new String[contactListInGroup.size()];
         if(!chosenGroupId.equals("")) {
             for (int i = 0; i < contactListInGroup.size(); i++) {
-                memberNames[i] = contactListInGroup.get(i).phDisplayName;
+                teamLeadNames[i] = contactListInGroup.get(i).phDisplayName;
             }
         }
 
         statusItems = new ArrayList<StatusItem>();
 
-        for (int i = 0; i < memberNames.length; i++) {
-            StatusItem item = new StatusItem(memberNames[i], false);
+        for (int i = 0; i < teamLeadNames.length; i++) {
+            StatusItem item = new StatusItem(teamLeadNames[i], false);
 
             statusItems.add(item);
         }
 
-        adapter = new TeamLeadCustomAdapter(getActivity(), statusItems);
+        adapter = new BCMStatusCustomAdapter(getActivity(), statusItems);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
 
@@ -88,8 +88,8 @@ public class TeamLeadStatusListFragment extends ListFragment implements OnItemCl
                 ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID
         };
         Cursor c = getActivity().getContentResolver().query(
-                groupURI, projection,
-                ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + "=" + groupID, null, null);
+            groupURI, projection,
+            ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + "=" + groupID, null, null);
         while(c.moveToNext()){
             String id = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID));
             Cursor pCur = getActivity().getContentResolver().query(

@@ -5,17 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
-public class BCMStatusActivity extends ActionBarActivity {
-
-
+public class TeamLeadStatusActivity extends ActionBarActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bcm_status);
+        setContentView(R.layout.team_lead_status);
         setTitle(R.string.status_title_bar);
 
     }
@@ -38,14 +37,16 @@ public class BCMStatusActivity extends ActionBarActivity {
 
     private void returnToMainScreen(){
         //passes values to intent and starts the next class
-        Intent i = new Intent(BCMStatusActivity.this, MainActivity.class);
+        Intent i = new Intent(TeamLeadStatusActivity.this, MainActivity.class);
         startActivity(i);
         finish();
     }
 
-    public void reportOnClick(View v){
-        Intent i = new Intent(BCMStatusActivity.this, BCMReportActivity.class);
+    public void sendReportOnClick(View v){
+        Toast.makeText(this, "Report successfully sent to BCM Manager", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(TeamLeadStatusActivity.this, MainActivity.class);
         startActivity(i);
+        finish();
     }
 
 }

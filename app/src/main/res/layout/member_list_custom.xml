@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="40dp">
+
+    <TextView
+        android:id="@+id/team_member_name"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yesNoToggle"
+        android:onClick="onToggleClicked"
+        android:text="Yes/No"
+        android:textOn="Yes"
+        android:textOff="No"/>
+
+
+</LinearLayout>

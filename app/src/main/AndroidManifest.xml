@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.carrefour.bcm_notification_system">
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,9 +32,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.carrefour.bcm_notification_system.TriggerActivity" />
         </activity>
-
+        <activity android:name=".TeamLeadStatusActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.carrefour.bcm_notification_system.TriggerActivity" />
+        </activity>
+        <activity android:name=".BCMReportActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.carrefour.bcm_notification_system.TriggerActivity" />
+        </activity>
+        <activity android:name=".BCMEmailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.carrefour.bcm_notification_system.TriggerActivity" />
+        </activity>
     </application>
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 

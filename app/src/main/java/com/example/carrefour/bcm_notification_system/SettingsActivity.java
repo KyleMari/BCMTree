@@ -37,6 +37,7 @@ import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Created by kyle.mari.torralba on 9/20/2016.
@@ -50,7 +51,6 @@ public class SettingsActivity extends ActionBarActivity {
     EditText drillMsgField;
     TextView emailBcmNumLabel;
     NumberPicker timeLimitPicker;
-    Configuration config;
 
     public static final String MY_PREFERENCES = "MyPrefs";
     SharedPreferences sharedPreferences;
@@ -67,12 +67,6 @@ public class SettingsActivity extends ActionBarActivity {
 
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        //checks for extras from previous intent
-        /*config = new Configuration();
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();*/
-
-
 
         //initializes the view variables
         roleSpinner = (Spinner) findViewById(R.id.role_spinner);
@@ -166,8 +160,8 @@ public class SettingsActivity extends ActionBarActivity {
             }
 
             if(sharedPreferences.getBoolean("isFirstRun", true)){
-                insertContactToGroup("BCM"); // programmatically inserts contact to groups
-                createGroups(); // programmatically creates contact groups
+                //insertContactToGroup(); // programmatically inserts contact to groups
+                ///createGroups(); // programmatically creates contact groups
                 editor.putBoolean("isFirstRun", false);
                 editor.commit();
             }
@@ -222,27 +216,23 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
     private void returnToMainScreen(){
-        //gets the value of the attributes
-        //config.setContactGroup(contactGroupSpinner.getSelectedItem().toString().trim());
-        //config.setRole(roleSpinner.getSelectedItem().toString().trim());
 
-        //passes values to intent and starts the next class
+        Toast.makeText(this, "Configuration automatically saved", Toast.LENGTH_LONG).show();
+
+        //saving values to sharedPreference and starts the next class
         Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-        //i.putExtras(config.getAttribBundle());
         startActivity(intent);
 
+        //gets the value of the attributes
         editor.putString("userMode", roleSpinner.getSelectedItem().toString().trim());
         editor.putString("contactGroup", contactGroupSpinner.getSelectedItem().toString().trim());
         for(int i = 0; i < groupList.size(); i++){
             if(groupList.get(i).name.equals(contactGroupSpinner.getSelectedItem().toString().trim())){
-                Toast.makeText(this, groupList.get(i).id + " - " + groupList.get(i).name, Toast.LENGTH_LONG).show();
                 editor.putString("contactGroupID", groupList.get(i).id);
             }
         }
 
         if(roleSpinner.getSelectedItem().toString().trim().equals("BCM")){
-            //config.setEmail(emailBcmNumField.getText().toString().trim());
-            //config.setTimeLimitLength(timeLimitPicker.getValue());
             editor.putString("email", emailBcmNumField.getText().toString().trim());
             editor.putInt("timeLimit", timeLimitPicker.getValue());
         }
@@ -306,38 +296,50 @@ public class SettingsActivity extends ActionBarActivity {
         return groupList;
     }
 
-    private ArrayList<String> retrieveContactNames(){
-        ArrayList<String> names = new ArrayList<String>();
+    private HashMap<String, String> retrieveContactIDs(){
+        HashMap<String, String> ids = new HashMap<String, String>();
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
+        int ctr = 0;
         if(cur.getCount() > 0){
             while(cur.moveToNext()){
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                names.add(name);
+                ids.put(String.valueOf(ctr), id);
+                ctr++;
             }
         }
-        return names;
+        return ids;
     }
 
-    private void insertContactToGroup(String role){
+    private void insertContactToGroup(){
         ContentValues values = new ContentValues();
 
-        if(role.equals("BCM")) {
+        /*values.put(Data.RAW_CONTACT_ID, 1);
+        values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+        values.put(Phone.NUMBER, "09339329234");
+        values.put(Phone.TYPE, Phone.TYPE_CUSTOM);
+        values.put(Data.DISPLAY_NAME, "Aileen Allattica");
+        values.put(Phone.LABEL, "Project Lead");*/
 
-            values.put(Data.RAW_CONTACT_ID, 1);
-            values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-            values.put(Phone.NUMBER, "09339329234");
-            values.put(Phone.TYPE, Phone.TYPE_CUSTOM);
-            values.put(Data.DISPLAY_NAME, "Aileen Allattica");
-            values.put(Phone.LABEL, "Project Lead");
-            values.put(GroupMembership.RAW_CONTACT_ID, 1);
+        HashMap<String, String> contactNames = new HashMap<String, String>();
+        contactNames = retrieveContactIDs();
+
+        for(int i = 0; i < 2; i++) {
+            values.put(GroupMembership.RAW_CONTACT_ID, contactNames.get(String.valueOf(i)));
             values.put(GroupMembership.GROUP_ROW_ID, 1);
             values.put(ContactsContract.CommonDataKinds.GroupMembership.MIMETYPE,
                     ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE);
             Uri dataUri = getContentResolver().insert(Data.CONTENT_URI, values);
+        }
 
+        for(int i = 2; i < 4; i++){
+            values.put(GroupMembership.RAW_CONTACT_ID, contactNames.get(String.valueOf(i)));
+            values.put(GroupMembership.GROUP_ROW_ID, 2);
+            values.put(ContactsContract.CommonDataKinds.GroupMembership.MIMETYPE,
+                    ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE);
+            Uri dataUri = getContentResolver().insert(Data.CONTENT_URI, values);
         }
     }
 
@@ -345,12 +347,10 @@ public class SettingsActivity extends ActionBarActivity {
         ContentValues groupValues;
         ContentResolver cr = getContentResolver();
         groupValues = new ContentValues();
-        groupValues.put(ContactsContract.Groups._ID, 1);
         groupValues.put(ContactsContract.Groups.TITLE, "Carrefour");
         cr.insert(ContactsContract.Groups.CONTENT_URI, groupValues);
 
         groupValues = new ContentValues();
-        groupValues.put(ContactsContract.Groups._ID, 2);
         groupValues.put(ContactsContract.Groups.TITLE, "Coles");
         cr.insert(ContactsContract.Groups.CONTENT_URI, groupValues);
     }

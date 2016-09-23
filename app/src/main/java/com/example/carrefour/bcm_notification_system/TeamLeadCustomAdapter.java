@@ -6,20 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.List;
 
 /**
  * Created by kyle.mari.torralba on 9/21/2016.
  */
-public class TeamLeadStatusCustomAdapter extends BaseAdapter {
+public class TeamLeadCustomAdapter extends BaseAdapter {
 
     Context context;
     List<StatusItem> statusItem;
 
-    public TeamLeadStatusCustomAdapter(Context context, List<StatusItem> statusItem){
+    public TeamLeadCustomAdapter(Context context, List<StatusItem> statusItem){
         this.context = context;
         this.statusItem = statusItem;
     }
@@ -45,17 +45,20 @@ public class TeamLeadStatusCustomAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context
                     .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.group_list_custom, parent, false);
+            convertView = mInflater.inflate(R.layout.member_list_custom, parent, false);
         }
 
-        TextView name = (TextView) convertView.findViewById(R.id.team_lead_name);
-        CheckBox chkbox = (CheckBox) convertView.findViewById(R.id.feedback_chkbox);
+        TextView name = (TextView) convertView.findViewById(R.id.team_member_name);
+        ToggleButton yesNoToggle = (ToggleButton) convertView.findViewById(R.id.yesNoToggle);
+        /*yesNoToggle.setText("No");
+        yesNoToggle.setTextOff("No");
+        yesNoToggle.setTextOn("Yes");*/
 
         StatusItem row_pos = statusItem.get(position);
         // setting the image resource and title
 
-        name.setText(row_pos.getTeamLeadName());
-        chkbox.setSelected(row_pos.isChecked());
+        name.setText(row_pos.getContactName());
+        yesNoToggle.setSelected(row_pos.isChecked());
 
         return convertView;
     }
